@@ -4,6 +4,7 @@ metadata:
   labels:
     app: my-monitored-redis-exporter
   name: my-monitored-redis-exporter
+  namespace: monitoring
 spec:
   ports:
   - name: metrics

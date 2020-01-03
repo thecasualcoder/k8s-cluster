@@ -4,6 +4,7 @@ metadata:
   labels:
     app: my-monitored-redis
   name: my-monitored-redis
+  namespace: monitoring
 spec:
   replicas: 1
   selector:
