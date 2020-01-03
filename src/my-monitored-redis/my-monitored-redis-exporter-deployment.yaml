@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: my-monitored-redis-exporter
+  name: my-monitored-redis-exporter
+spec:
+  selector:
+    matchLabels:
+      app: my-monitored-redis-exporter
+  template:
+    metadata:
+      labels:
+        app: my-monitored-redis-exporter
+    spec:
+      containers:
+      - env:
+        - name: REDIS_ADDR
+          value: redis://my-monitored-redis:6379
+        - name: REDIS_ALIAS
+          value: my-monitored-redis
+        image: oliver006/redis_exporter:v0.21.1
+        imagePullPolicy: IfNotPresent
+        name: metrics
+        ports:
+        - containerPort: 9121
+          name: metrics
+          protocol: TCP
