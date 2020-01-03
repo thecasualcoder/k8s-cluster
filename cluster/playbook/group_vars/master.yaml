@@ -1,0 +1,22 @@
+---
+pod_network_cidr: "10.244.0.0/16"
+service_cidr: "10.96.0.0/12"
+additional_user:
+  create: true
+  copy_to_host: true
+  cluster_role: "cluster-admin"
+provider: "virtualbox"
+
+ccm_default_url: https://raw.githubusercontent.com/digitalocean/digitalocean-cloud-controller-manager/master/releases/v0.1.21.yml
+
+addons:
+  csi:
+    enabled: true
+  ccm:
+    enabled: true
+    url: "{{ ccm_default_url }}"
+  external_dns:
+    enabled: false
+    domain_filter:
+    # can be ingress | service
+    source: ingress

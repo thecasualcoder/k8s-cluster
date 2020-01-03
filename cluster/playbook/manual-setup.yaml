@@ -1,0 +1,14 @@
+---
+- name: Install common packages for k8s-cluster
+  hosts: common
+  remote_user: ubuntu
+  become: yes
+  roles:
+    - common
+
+- name: Configure docker and kubernetes
+  hosts: common
+  remote_user: ubuntu
+  become: yes
+  roles:
+    - {role: kubernetes/common}

@@ -1,0 +1,4 @@
+*.vagrant/
+*_TOKEN
+*.log
+.env
