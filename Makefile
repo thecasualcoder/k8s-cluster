@@ -11,6 +11,9 @@ bootstrap: up ## Create necessary VMs and install necessary binaries
 provision: bootstrap ## Create necessary VMs and provision the VMs and install necessary binaries for manual setup
 	K8S_PLAYBOOK="manual-setup" vagrant provision
 
+provision.cluster: up ## Create necessary VMs and provision the VMs with K8s cluster
+	K8S_PLAYBOOK="kubernetes" vagrant provision
+
 destroy.vm:
 	-vagrant destroy --force
 
@@ -19,3 +22,6 @@ destroy: destroy.vm ## Destroy all the Vms
 
 status: ## Prints the VMs status
 	vagrant status
+
+reset: ## Reset the kubernetes cluster
+	ansible-playbook -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory playbook/kubernetes-reset.yaml

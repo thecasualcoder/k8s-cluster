@@ -1,0 +1,29 @@
+---
+- include_role:
+    name: kubernetes/addons/common/secret
+
+- name: Get an existing external dns controller
+  k8s_info:
+    api_version: apps/v1
+    kind: Deployment
+    name: external-dns
+    namespace: kube-system
+  register: external_dns
+
+- name: Install external dns
+  block:
+    - name: Create temporary file to generate external dns
+      tempfile:
+        state: file
+        suffix: yaml
+      register: external_dns_file
+
+    - name: Generate external dns file
+      template:
+        src: "external-dns.yaml.j2"
+        dest: "{{ external_dns_file.path }}"
+
+    - name: Create external dns
+      shell: "kubectl --kubeconfig {{kubeadmin_config}} apply -f {{ external_dns_file.path }}"
+
+  when: (external_dns.resources|length == 0)

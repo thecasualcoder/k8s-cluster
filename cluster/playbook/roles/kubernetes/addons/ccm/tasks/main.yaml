@@ -1,0 +1,12 @@
+---
+- name: Get an existing cloud controller manager for digitalocean info
+  k8s_info:
+    api_version: apps/v1
+    kind: Deployment
+    name: digitalocean-cloud-controller-manager
+    namespace: kube-system
+  register: ccm_deployment
+
+- name: Install cloud controller manager for digitalocean
+  shell: "kubectl --kubeconfig {{kubeadmin_config}} apply -f {{ addons.ccm.url | default(ccm_default_url) }} "
+  when: (ccm_deployment.resources|length == 0)
