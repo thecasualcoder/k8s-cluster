@@ -1,0 +1,40 @@
+---
+- name: Install pip for installing kubernetes module for ansible
+  apt:
+    pkg:
+      - python-pip
+      - python3-pip
+      - python-apt
+    update_cache: yes
+
+- name: Install openshift pip package for ansible to query kubernetes objects
+  shell:
+    cmd: "/usr/bin/{{ item.cmd }} install openshift"
+    creates: "/usr/local/lib/{{ item.version }}/dist-packages/kubernetes"
+  with_items:
+    - { cmd: 'pip', version: 'python2.7' }
+    - { cmd: 'pip3', version: 'python3.6' }
+
+- name: Check if kubeadm has already run
+  stat:
+    path: "/etc/kubernetes/pki/ca.key"
+  register: kubeadm_ca
+
+- name: Init cluster if needed
+  include_tasks: init.yaml
+  when: not kubeadm_ca.stat.exists
+  run_once: yes
+
+- name: Enable and check kubelet service
+  systemd:
+    name: kubelet
+    daemon_reload: yes
+    state: started
+    enabled: yes
+  register: started_kubelet
+
+- name: Create additional user
+  include_tasks: user.yaml
+  when: additional_user.create
+  run_once: yes
+

@@ -1,0 +1,42 @@
+---
+- name: Install common packages for k8s-cluster
+  hosts: common
+  remote_user: ubuntu
+  become: yes
+  roles:
+    - common
+
+- name: Configure docker and kubernetes
+  hosts: common
+  remote_user: ubuntu
+  become: yes
+  roles:
+    - {role: kubernetes/common}
+
+- name: Configure kubernetes master
+  hosts: master
+  remote_user: ubuntu
+  become: yes
+  environment:
+    K8S_AUTH_KUBECONFIG: "{{kubeadmin_config}}"
+  roles:
+    - {role: kubernetes/master}
+    - {role: kubernetes/addons/cni}
+    - {role: kubernetes/addons/ingress, when: addons.ingress.enabled == "true"}
+    - {role: kubernetes/addons/csi, when: provider == "digitalocean" and addons.csi.enabled == "true"}
+    - {role: kubernetes/addons/ccm, when: provider == "digitalocean" and addons.ccm.enabled == "true"}
+    - {role: kubernetes/addons/external_dns, when: provider == "digitalocean" and addons.external_dns.enabled == "true"}
+    - {role: kubernetes/addons/cert_manager, when: addons.cert_manager.enabled == "true"}
+
+- name: Configure kubernetes nodes
+  hosts: node
+  remote_user: ubuntu
+  become: yes
+  roles:
+    - kubernetes/node
+
+- name: Configure ebs
+  hosts: common
+  become: yes
+  roles:
+    - {role: kubernetes/addons/ebs, when: addons.ebs.enabled == "true"}

@@ -1,0 +1,20 @@
+---
+- include_role:
+    name: kubernetes/addons/common/secret
+
+- name: Install external dns
+  block:
+    - name: Create a external_dns directory if necessary
+      file:
+        path: "{{ external_dns_path }}"
+        state: directory
+
+    - name: Generate external dns file
+      template:
+        src: "external_dns.yaml.j2"
+        dest: "{{ external_dns_path }}/external_dns.yaml"
+      register: external_dns_template
+
+    - name: Create external dns
+      shell: "kubectl --kubeconfig {{kubeadmin_config}} apply -f {{ external_dns_path }}/external_dns.yaml"
+      when: external_dns_template.changed

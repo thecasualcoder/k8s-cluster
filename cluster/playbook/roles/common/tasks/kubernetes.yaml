@@ -1,0 +1,26 @@
+---
+- name: Add apt key for google packages
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+
+- name: Add google repository
+  apt_repository:
+    repo: "deb https://apt.kubernetes.io/ kubernetes-{{kubernetes_package_codename}} main"
+    state: present
+
+- name: Install Kubeadm, kubelet and kubectl
+  apt:
+    pkg:
+      - kubelet
+      - kubeadm
+      - kubectl
+
+- name: Prevent the kubelet, kubeadm and kubectl from being automatically installed, upgraded or removed.
+  dpkg_selections:
+    name: "{{item}}"
+    selection: hold
+  loop:
+    - kubelet
+    - kubeadm
+    - kubectl

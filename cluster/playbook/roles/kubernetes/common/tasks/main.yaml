@@ -1,0 +1,18 @@
+---
+- name: Configure docker
+  template:
+    src: templates/docker.daemon.json.j2
+    dest: /etc/docker/daemon.json
+  notify:
+    - restart-docker
+
+- name: Enable system.d for docker
+  file:
+    path: /etc/systemd/system/docker.service.d
+    state: directory
+
+- name: Configure kublet
+  template:
+    src: templates/kubelet-default.j2
+    dest: /etc/default/kubelet
+  become: yes

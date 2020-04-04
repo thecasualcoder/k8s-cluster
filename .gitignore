@@ -1,0 +1,7 @@
+*.vagrant/
+*.vagrant-*/
+*_TOKEN
+*.log
+.envrc
+.env
+.envrc-E

@@ -1,0 +1,15 @@
+---
+- name: Install necessary packages
+  apt:
+    pkg:
+      - apt-transport-https
+      - curl
+      - ca-certificates
+      - software-properties-common
+    update_cache: yes
+
+- name: Include docker
+  include: docker.yaml
+
+- name: Include kubernetes
+  include: kubernetes.yaml

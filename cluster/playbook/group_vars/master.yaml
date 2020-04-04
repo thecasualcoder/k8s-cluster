@@ -1,0 +1,31 @@
+---
+pod_network_cidr: "10.244.0.0/16"
+service_cidr: "10.96.0.0/12"
+additional_user:
+  create: true
+  copy_to_host: true
+  cluster_role: "cluster-admin"
+provider: "virtualbox"
+
+ccm_default_url: https://raw.githubusercontent.com/digitalocean/digitalocean-cloud-controller-manager/master/releases/v0.1.21.yml
+host_user: "{{lookup('env','USER')}}"
+kube_configs_dir: "{{lookup('env','HOME')}}/.kube/configs"
+cluster_name: "{{lookup('env','CLUSTER_NAME_PREFIX') | default('k8s')}}"
+addons:
+  ingress:
+    enabled: true
+  csi:
+    enabled: true
+    upgrade: false
+  ccm:
+    enabled: true
+    url: "{{ ccm_default_url }}"
+  external_dns:
+    enabled: false
+    domain_filter:
+    # can be ingress | service
+    source: ingress
+  cert_manager:
+    enabled: false
+    acme_email_address: "example@example.com"
+    environment: dev

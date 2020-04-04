@@ -1,0 +1,2 @@
+ingress_path: /opt/addons/ingress
+ingress_version: "0.26.2"

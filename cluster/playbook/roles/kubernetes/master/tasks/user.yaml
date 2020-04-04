@@ -1,0 +1,33 @@
+---
+- name: "Create additional user {{host_user}}"
+  shell:
+    cmd: |
+      kubeadm alpha kubeconfig user --client-name {{ host_user }} > {{kubeconfig_path}}{{host_user}}.conf
+    creates: "{{kubeconfig_path}}{{host_user}}.conf"
+
+- name: Get an existing Service object
+  k8s_info:
+    api_version: v1
+    kind: ClusterRoleBinding
+    name: "{{host_user}}-cluster-admin"
+    field_selectors:
+      - resources
+  register: user_cluster_admin
+
+- name: "Provide necessary permission for {{host_user}}"
+  shell: "kubectl --kubeconfig {{kubeadmin_config}} create clusterrolebinding {{host_user}}-cluster-admin --clusterrole={{additional_user.cluster_role}} --user={{host_user}}"
+  when: (user_cluster_admin.resources|length == 0)
+
+- name: Create ~/.kube/configs directory
+  become: false
+  delegate_to: 127.0.0.1
+  file:
+    path: "{{kube_configs_dir}}"
+    state: directory
+
+- name: "Copy {{host_user}} to host machine ~/.kube/configs"
+  fetch:
+    src: "{{kubeconfig_path}}{{host_user}}.conf"
+    dest: "{{kube_configs_dir}}/{{host_user}}-{{cluster_name}}.conf"
+    flat: true
+  when: additional_user.copy_to_host

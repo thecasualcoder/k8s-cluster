@@ -1,0 +1,17 @@
+---
+- name: Add apt key for docker packages
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add docker repository
+  apt_repository:
+    repo: "deb https://download.docker.com/linux/ubuntu {{codename}} stable"
+    state: present
+
+- name: Install docker and docker-cli
+  apt:
+    pkg:
+      - "docker-ce={{docker_version}}~ubuntu-{{codename}}"
+      - "docker-ce-cli={{docker_version}}~ubuntu-{{codename}}"
+    state: present

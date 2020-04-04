@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    component: kube-apiserver
+    tier: control-plane
+  name: kube-apiserver
+  namespace: kube-system
+spec:
+  containers:
+  - command:
+    - kube-apiserver
+    - --etcd-servers=http://localhost:2379
+    - --service-cluster-ip-range=10.96.0.0/12
+    - --service-account-lookup=false
+    - --disable-admission-plugins=ServiceAccount
+    image: k8s.gcr.io/kube-apiserver:v1.17.0
+    imagePullPolicy: IfNotPresent
+    name: kube-apiserver
+  hostNetwork: true

@@ -1,0 +1,31 @@
+---
+- include_role:
+    name: kubernetes/addons/common/secret
+
+- name: Get an existing CSI driver
+  k8s_info:
+    api_version: storage.k8s.io/v1beta1
+    kind: CSIDriver
+  register: csi_driver
+
+- name: Create csi driver
+  block:
+  - name: Create temporary file to generate csi driver
+    tempfile:
+      state: file
+      suffix: yaml
+    register: csi_driver_file
+
+  - name: Generate csi driver file
+    template:
+      src: "csi-digitalocean.yaml"
+      dest: "{{ csi_driver_file.path }}"
+
+  - name: "Delete existing csi driver"
+    shell: "kubectl --kubeconfig {{kubeadmin_config}} delete -f {{ csi_driver_file.path }} "
+    ignore_errors: yes
+    when: (csi_driver.resources|length != 0)
+
+  - name: "Create csi driver"
+    shell: "kubectl --kubeconfig {{kubeadmin_config}} apply -f {{ csi_driver_file.path }} "
+  when: (csi_driver.resources|length == 0) or (addons.csi.upgrade == true)

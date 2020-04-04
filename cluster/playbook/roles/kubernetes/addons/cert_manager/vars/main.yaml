@@ -1,0 +1,2 @@
+cert_manager_path: /opt/addons/cert_manager
+cert_manager_version: "v0.12.0"

@@ -1,0 +1,7 @@
+---
+- name: Install common packages for k8s-cluster
+  hosts: common
+  remote_user: ubuntu
+  become: yes
+  roles:
+    - common

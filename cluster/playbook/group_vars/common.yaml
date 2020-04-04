@@ -1,0 +1,14 @@
+---
+network_interface: 'enp0s8'
+master_node: "{{ groups['master'][0] }}"
+master_ip: "{{ hostvars[master_node]['ansible_'+ network_interface]['ipv4']['address'] | default(master_node) }}"
+default_network_ip: "{{ hostvars[master_node]['ansible_default_ipv4']['address'] }}"
+init_opts: ""
+kubeadmin_config: /etc/kubernetes/admin.conf
+kubeconfig_path: /etc/kubernetes/
+enable_dashboard: false
+kubeadm_opts: ""
+network_dir: /etc/kubernetes/network
+
+# Network implementation('flannel', 'canal')
+network: canal

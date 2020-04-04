@@ -1,0 +1,9 @@
+---
+secretGenerator:
+  - name: external-dns-digitalocean
+    files:
+    - DO_TOKEN
+generatorOptions:
+  disableNameSuffixHash: true
+resources:
+  - external-dns.yaml

@@ -1,0 +1,18 @@
+---
+- name: Create ingress
+  block:
+
+  - name: Create a ingress directory if necessary
+    file:
+      path: "{{ingress_path}}"
+      state: directory
+
+  - name: Generate ingress file
+    template:
+      src: "ingress.yaml.j2"
+      dest: "{{ ingress_path }}/ingress.yaml"
+    register: ingress_template
+
+  - name: Create ingress
+    shell: "kubectl --kubeconfig {{kubeadmin_config}} apply -f {{ ingress_path }}/ingress.yaml"
+    when: ingress_template.changed
