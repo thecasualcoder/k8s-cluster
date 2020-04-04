@@ -85,9 +85,9 @@ end
 Vagrant.configure("2") do |config|
   machines = [
     {"name": "master", "virtualbox_private_ip": "10.10.10.2", "role": "master"},
-    # {"name": "node-01", "virtualbox_private_ip": "10.10.10.3", "role": "node"},
-    # {"name": "node-02", "virtualbox_private_ip": "10.10.10.4", "role": "node"},
-    # {"name": "node-03", "virtualbox_private_ip": "10.10.10.5", "role": "node"},
+    {"name": "node-01", "virtualbox_private_ip": "10.10.10.3", "role": "node"},
+    {"name": "node-02", "virtualbox_private_ip": "10.10.10.4", "role": "node"},
+    {"name": "node-03", "virtualbox_private_ip": "10.10.10.5", "role": "node"},
   ]
 
   provider = ENV.fetch("K8S_PROVIDER", "virtualbox")
