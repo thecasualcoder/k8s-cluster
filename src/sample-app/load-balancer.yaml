@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: external-nginx
 spec:
-  externalTrafficPolicy: local
+  externalTrafficPolicy: Local
   type: LoadBalancer
   selector:
     app: nginx
