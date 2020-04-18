@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rest-config
+  labels:
+    app: rest-config
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rest-config
+  template:
+    metadata:
+      labels:
+        app: rest-config
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "web"
+        vault.hashicorp.com/agent-inject-secret-web: "kv/web"
+        vault.hashicorp.com/secret-volume-path-web: /configs
+        vault.hashicorp.com/agent-inject-template-web: |
+          {{ with secret "kv/web" -}}
+          {{ .Data | toJSON }}
+          {{- end }}
+    spec:
+      serviceAccountName: "web"
+      containers:
+        - name: rest-config
+          image: aswinkarthik93/rest-config:v1
+          args:
+            - /configs/web
+          ports:
+            - containerPort: 8080
