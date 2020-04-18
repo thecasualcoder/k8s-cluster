@@ -31,7 +31,7 @@ def create_vms_on_digital_ocean(machines, config)
         provider.ssh_key_name = ENV["DIGITAL_OCEAN_SSH_KEY_NAME"]
         provider.token = ENV["DIGITAL_OCEAN_TOKEN"]
         provider.image = 'ubuntu-18-04-x64'
-        provider.region = 'blr1'
+        provider.region = ENV.fetch("REGION", 'blr1')
         provider.size = ENV.fetch("INSTANCE_TYPE", 's-2vcpu-4gb')
         provider.tags =  ['kubernetes', machine[:role], cluster_name_prefix]
         provider.private_networking = true
