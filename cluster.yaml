@@ -1,0 +1,11 @@
+---
+cluster:
+  master:
+    box: ubuntu/bionic64
+    cpus: 2
+    memory: 2048
+  node_pools:
+    - count: 1
+      box: ubuntu/bionic64
+      cpus: 2
+      memory: 2048

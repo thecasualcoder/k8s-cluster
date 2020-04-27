@@ -1,8 +1,17 @@
 ---
+
+- set_fact:
+    advertise_address: "{{ master_ip }}"
+  when: (use_private_ip_for_external_access | default(false))
+
+- set_fact:
+    advertise_address: "{{ default_network_ip }}"
+  when: not (use_private_ip_for_external_access | default(false))
+
 - name: "Create additional user {{host_user}}"
   shell:
     cmd: |
-      kubeadm alpha kubeconfig user --client-name {{ host_user }} > {{kubeconfig_path}}{{host_user}}.conf
+      kubeadm alpha kubeconfig user --client-name {{ host_user }} --apiserver-advertise-address {{ advertise_address }} > {{kubeconfig_path}}{{host_user}}.conf
     creates: "{{kubeconfig_path}}{{host_user}}.conf"
 
 - name: Get an existing Service object
@@ -30,4 +39,3 @@
     src: "{{kubeconfig_path}}{{host_user}}.conf"
     dest: "{{kube_configs_dir}}/{{host_user}}-{{cluster_name}}.conf"
     flat: true
-  when: additional_user.copy_to_host
