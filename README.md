@@ -70,10 +70,9 @@ for other shell, refer [here](https://github.com/direnv/direnv/blob/master/docs/
 
 ### Virtualbox
 
-1. For setting up VirtualBox, copy the `.envrc.sample` as `.envrc` file and allow it via direnv
+1. For setting up VirtualBox, create ENV variables from `.envrc` using `direnv`
 
 ```bash
-$ cp .envrc.sample .envrc
 $ direnv allow .
 ```
 
