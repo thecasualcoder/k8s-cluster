@@ -69,11 +69,13 @@ def machines_info(preference, provider)
   master = merge(machine_defaults, preference.fetch(:cluster, {}).fetch(:master, machine_defaults))
   nodes = preference.fetch(:cluster, {}).fetch(:node_pools, [provider_defaults(provider).merge({ count: 1 })])
 
-  nodes.each_with_index do |node, pool_index|
   machines = [master.merge({ role: 'master', name: "#{prefix}-master", virtualbox_private_ip: '10.10.10.2' })]
+  machine_index = 1
+  nodes.each do |node|
     (0...node[:count]).each do |index|
-      machine_index = pool_index + index + 1
-      machines << merge(machine_defaults, node).merge({role: "node", name: "#{prefix}-node-#{machine_index}", virtualbox_private_ip: "10.10.10.#{2+machine_index}"})
+      machine_name = "#{prefix}-node-#{node[:name]}-#{index + 1}"
+      machines << merge(machine_defaults, node).merge({ role: 'node', name: machine_name, virtualbox_private_ip: "10.10.10.#{2 + machine_index}" })
+      machine_index += 1
     end
   end
   machines
