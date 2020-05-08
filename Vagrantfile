@@ -16,7 +16,6 @@ def create_vms_on_virtualbox(machines, config)
         override.vm.hostname = machine[:name]
         override.vm.network "private_network", ip: machine[:virtualbox_private_ip]
 
-        override.vm.synced_folder "src/", "/srv"
         override.vm.synced_folder ".", "/vagrant", disabled: true
         configure_provision(index, machines, override, {
           "network_interface": "enp0s8",
@@ -45,7 +44,6 @@ def create_vms_on_digital_ocean(machines, config)
         provider.private_networking = true
 
         override.ssh.private_key_path = "~/.ssh/#{ENV["DIGITAL_OCEAN_PRIVATE_KEY"]}"
-        override.vm.synced_folder "src/", "/srv", disabled: true
         override.vm.synced_folder ".", "/vagrant", disabled: true
         override.vm.box = 'digital_ocean'
         override.vm.box_url = "https://github.com/devopsgroup-io/vagrant-digitalocean/raw/master/box/digital_ocean.box"
