@@ -4,10 +4,10 @@ Create your own Kubernetes cluster
 
 ## Prerequisite
 
-- [Vagrant](https://www.vagrantup.com/) v2.2.7
-- [Virtualbox](https://www.virtualbox.org/) v6.1.4
-- [Ansible](https://www.ansible.com/) v2.9.6
-- [Vagrant DigitalOcean](https://github.com/devopsgroup-io/vagrant-digitalocean) v0.9.4
+- [Vagrant](https://www.vagrantup.com/) v2.2.8
+- [Virtualbox](https://www.virtualbox.org/) v6.1.6
+- [Ansible](https://www.ansible.com/) v2.9.7
+- [Vagrant DigitalOcean](https://github.com/devopsgroup-io/vagrant-digitalocean) v0.9.5
 - [Direnv](https://github.com/direnv/direnv) v2.21.2
 
 > ensure you have the specified version or above for all the above mentioned tools
@@ -90,6 +90,10 @@ DIGITAL_OCEAN_PRIVATE_KEY: private_key_file_name (assumption is the file will be
 ## This command has to be run for every change in .envrc
 $ direnv allow .
 ```
+6. Use digitalocean based cluster
+```bash
+$ make use.digitalocean
+```
 
 Additionally, if you are using ZSH shell instead of bash
 
@@ -98,19 +102,19 @@ Additionally, if you are using ZSH shell instead of bash
 $ eval "$(direnv hook zsh)"
 ```
 
-6. To create the cluster,
+7. To create the cluster,
 
 ```bash
 $ make provision.cluster
 ```
 
-7. To access the cluster, set the KUBECONFIG environment variable as
+8. To access the cluster, set the KUBECONFIG environment variable as
 
 ```bash
 $ export KUBECONFIG=$HOME/.kube/configs/$USER.conf
 ```
 
-8. To teardown the cluster, execute
+9. To teardown the cluster, execute
 ```bash
 $ make destroy
 ```
@@ -138,13 +142,18 @@ K8S_PROVIDER: virtualbox
 $ make provision.cluster
 ```
 
-3. To access the cluster, set the KUBECONFIG environment variable as
+3. Use virtualbox based cluster
+```bash
+$ make use.virtualbox
+```
+
+4. To access the cluster, set the KUBECONFIG environment variable as
 
 ```bash
 $ export KUBECONFIG=$HOME/.kube/configs/$USER.conf
 ```
 
-4. To teardown the cluster, execute
+5. To teardown the cluster, execute
 ```bash
 $ make destroy
 ```

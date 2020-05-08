@@ -5,6 +5,12 @@ help: ## Prints help (only for targets with comments)
 up:
 	vagrant up --no-provision
 
+use.virtualbox: ## Use virtualbox as provider
+	ln -fs cluster.vb.yaml cluster.yaml
+
+use.digitalocean: ## Use digitalocean as provider
+	ln -fs cluster.do.yaml cluster.yaml
+
 provision.basic: up ## Create necessary VMs and install necessary binaries
 	K8S_PLAYBOOK="basic" vagrant provision
 

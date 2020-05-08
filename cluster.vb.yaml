@@ -1,0 +1,25 @@
+---
+addons:
+  cloud_control_manager: false
+  cloud_storage_interface: false
+  open_elastic_block_storage: false
+  ingress: false
+  external_dns:
+    enabled: false
+    domain_filter: example.com
+    source: ingress
+  cert_manager:
+    enabled: false
+    acme_email_address: example@example.test
+    environment: dev
+cluster:
+  provider : virtualbox
+  master:
+    box: ubuntu/bionic64
+    cpus: 2
+    memory: 2048
+  node_pools:
+    - count: 1
+      box: ubuntu/bionic64
+      cpus: 2
+      memory: 2048
