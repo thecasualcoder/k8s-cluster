@@ -7,7 +7,7 @@ require 'psych'
 require_relative('utils')
 require_relative('defaults')
 
-def create_vms_on_virtualbox(machines, config)
+def create_vms_on_virtualbox(machines, config, preference)
   machines.each_with_index do |machine, index|
     config.vm.define machine[:name] do |node|
       node.vm.provider 'virtualbox' do |provider, override|
@@ -17,7 +17,7 @@ def create_vms_on_virtualbox(machines, config)
         override.vm.hostname = machine[:name]
         override.vm.network 'private_network', ip: machine[:virtualbox_private_ip]
         override.vm.synced_folder '.', '/vagrant', disabled: true
-        configure_provision(index, machines, override, {
+        configure_provision(index, machines, preference, override, {
                               "network_interface": 'enp0s8',
                               "provider": 'virtualbox',
                               "use_private_ip_for_external_access": true
@@ -27,7 +27,7 @@ def create_vms_on_virtualbox(machines, config)
   end
 end
 
-def create_vms_on_digital_ocean(machines, config)
+def create_vms_on_digital_ocean(machines, config, preference)
   cluster_name_prefix = ENV.fetch('CLUSTER_NAME_PREFIX', 'k8s')
 
   machines.each_with_index do |machine, index|
@@ -48,7 +48,7 @@ def create_vms_on_digital_ocean(machines, config)
         override.vm.box_url = 'https://github.com/devopsgroup-io/vagrant-digitalocean/raw/master/box/digital_ocean.box'
         override.nfs.functional = false
 
-        configure_provision(index, machines, override, {
+        configure_provision(index, machines, preference, override, {
                               "network_interface": 'eth1',
                               "provider": 'digitalocean',
                               "digital_ocean_token": ENV['DIGITAL_OCEAN_TOKEN'],
@@ -89,8 +89,8 @@ Vagrant.configure('2') do |config|
 
     machines = machines_info(preference, provider)
 
-    create_vms_on_virtualbox(machines, config) if provider == 'virtualbox'
-    create_vms_on_digital_ocean(machines, config) if provider == 'digital_ocean'
+    create_vms_on_virtualbox(machines, config, preference) if provider == 'virtualbox'
+    create_vms_on_digital_ocean(machines, config, preference) if provider == 'digital_ocean'
   rescue Errno::ENOENT
     puts 'choose provider by running "make use.digitalocean" or "make use.virtualbox"'
     abort

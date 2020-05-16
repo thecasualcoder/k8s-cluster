@@ -1,7 +1,7 @@
 ---
 addons:
-  cloud_control_manager: false
-  cloud_storage_interface: false
+  cloud_control_manager: true
+  cloud_storage_interface: true
   open_elastic_block_storage: false
   ingress: false
   external_dns:
@@ -19,12 +19,12 @@ cluster:
     region: blr1
     size: s-2vcpu-4gb
   node_pools:
-    - count: 2
+    - count: 0
       image: ubuntu-18-04-x64
       region: blr1
       size: s-2vcpu-4gb
       name: medium
-    - count: 2
+    - count: 0
       image: ubuntu-18-04-x64
       region: blr1
       size: s-1vcpu-3gb

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'json'
 
 def symbolize_hash(hash)
   JSON.parse(JSON[hash], symbolize_names: true)
@@ -21,33 +22,37 @@ def machine_by_role(machines, role)
   result.compact
 end
 
-def configure_provision(index, machines, node, extra_vars = {})
+def configure_provision(index, machines, preference, node, extra_vars = {})
+  addons = preference.fetch(:addons, {})
+  external_dns = addons.fetch(:external_dns, {})
+  cert_manager = addons.fetch(:cert_manager, {})
+
   default_extra_vars = {
     "network_interface": 'enp0s8',
     "provider": 'virtualbox',
     "addons": {
       "ingress": {
-        "enabled": ENV.fetch('ADDONS_INGRESS_ENABLED', 'false')
+        "enabled": addons.fetch(:ingress, false),
       },
       "csi": {
-        "enabled": ENV.fetch('ADDONS_CSI_ENABLED', 'false'),
+        "enabled": addons.fetch(:cloud_storage_interface, false),
         "upgrade": true
       },
       "ccm": {
-        "enabled": ENV.fetch('ADDONS_CCM_ENABLED', 'false')
+        "enabled": addons.fetch(:cloud_control_manager, false),
       },
       "cert_manager": {
-        "enabled": ENV.fetch('ADDONS_CERT_MANAGER_ENABLED', 'false'),
-        "acme_email_address": ENV.fetch('ADDONS_CERT_MANAGER_ACME_EMAIL_ADDRESS', 'example@example.test'),
-        "environment": ENV.fetch('ADDONS_CERT_MANAGER_ENVIRONMENT', 'dev')
+        "enabled": cert_manager.fetch(:enabled, false),
+        "acme_email_address": cert_manager.fetch(:acme_email_address, 'example@example.test'),
+        "environment": cert_manager.fetch(:environment, 'dev'),
       },
       "external_dns": {
-        "enabled": ENV.fetch('ADDONS_EXTERNAL_DNS_ENABLED', 'false'),
-        "domain_filter": ENV.fetch('ADDONS_EXTERNAL_DNS_DOMAIN_FILTER', 'example.test'),
-        "source": ENV.fetch('ADDONS_EXTERNAL_DNS_SOURCE', 'service')
+        "enabled": external_dns.fetch(:enabled, false),
+        "domain_filter": external_dns.fetch(:domain_filter, 'example.test'),
+        "source": external_dns.fetch(:source, 'ingress'),
       },
       "ebs": {
-        "enabled": ENV.fetch('ADDONS_EBS_ENABLED', 'true')
+        "enabled": addons.fetch(:open_elastic_block_storage, true),
       }
     }
   }
@@ -67,6 +72,11 @@ def configure_provision(index, machines, node, extra_vars = {})
         "node": node_host_group.compact
       }
       ansible.extra_vars = default_extra_vars.merge(extra_vars)
+      if ENV.fetch('DEBUG') == 'true'
+        puts '## Configurations'
+        puts
+        puts JSON.pretty_generate(ansible.extra_vars)
+      end
     end
   end
 end
