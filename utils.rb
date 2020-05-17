@@ -72,7 +72,7 @@ def configure_provision(index, machines, preference, node, extra_vars = {})
         "node": node_host_group.compact
       }
       ansible.extra_vars = default_extra_vars.merge(extra_vars)
-      if ENV.fetch('DEBUG') == 'true'
+      if ENV.fetch('DEBUG', 'false') == 'true'
         puts '## Configurations'
         puts
         puts JSON.pretty_generate(ansible.extra_vars)
