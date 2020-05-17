@@ -9,6 +9,10 @@ export DIGITAL_OCEAN_TOKEN="YOUR DIGITAL OCEAN ACCESS TOKEN WITH READ/WRITE PERM
 export DIGITAL_OCEAN_SSH_KEY_NAME="YOUR EXISTING DIGITAL OCEAN SSH KEY NAME"
 export DIGITAL_OCEAN_PRIVATE_KEY="YOUR EXISTING DIGITAL OCEAN PRIVATE KEY NAME"
 
+# To print configuration of cluster
+# during provisioning, set to true
+export DEBUG=false
+
 ## Playbook
 ##
 ## For full cluster
