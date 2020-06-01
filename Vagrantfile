@@ -59,10 +59,6 @@ def create_vms_on_digital_ocean(machines, config, preference)
   end
 end
 
-def create_vms(_machines, _config)
-  ENV.fetch('K8S_PROVIDER', 'virtualbox') == 'virtualbox' ? :create_vms_on_virtualbox : :create_vms_on_digitalocean
-end
-
 def machines_info(preference, provider)
   prefix = ENV.fetch('CLUSTER_NAME_PREFIX', 'k8s')
   machine_defaults = provider_defaults(provider)
