@@ -111,7 +111,7 @@ $ make provision.cluster
 8. To access the cluster, set the KUBECONFIG environment variable as
 
 ```bash
-$ export KUBECONFIG=$HOME/.kube/configs/$USER.conf
+$ export KUBECONFIG=$HOME/.kube/configs/${USER}-${CLUSTER_NAME_PREFIX}.conf
 ```
 
 9. To teardown the cluster, execute
@@ -150,7 +150,7 @@ $ make use.virtualbox
 4. To access the cluster, set the KUBECONFIG environment variable as
 
 ```bash
-$ export KUBECONFIG=$HOME/.kube/configs/$USER.conf
+$ export KUBECONFIG=$HOME/.kube/configs/${USER}-${CLUSTER_NAME_PREFIX}.conf
 ```
 
 5. To teardown the cluster, execute
