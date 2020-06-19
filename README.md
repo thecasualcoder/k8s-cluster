@@ -78,19 +78,24 @@ In DigitalOcean,
 2. Follow the instruction [here](https://www.digitalocean.com/docs/droplets/how-to/add-ssh-keys/to-account/) to upload your ssh key to your digital ocean account
 3. `$ cp .envrc.sample .envrc`
 4. Modify the following configurations as per your credentials
-
 ```yaml
 DIGITAL_OCEAN_TOKEN: the token your have created in step 1
 DIGITAL_OCEAN_SSH_KEY_NAME: the ssh key you have created in step 2
 DIGITAL_OCEAN_PRIVATE_KEY: private_key_file_name (assumption is the file will be located under $HOME/.ssh/private_key_file_name) for which you have uploaded the public key in step 2
 ```
-5. Load the env variables
 
+5. Load the env variables
 ```bash
 ## This command has to be run for every change in .envrc
 $ direnv allow .
 ```
-6. Use digitalocean based cluster
+
+6. Validate the configuration
+```bash
+$ make validate
+```
+
+7. Use digitalocean based cluster
 ```bash
 $ make use.digitalocean
 ```
@@ -102,24 +107,24 @@ Additionally, if you are using ZSH shell instead of bash
 $ eval "$(direnv hook zsh)"
 ```
 
-7. To create the cluster,
+8. To create the cluster,
 
 ```bash
 $ make provision.cluster
 ```
 
-8. To access the cluster, set the KUBECONFIG environment variable as
+9. To access the cluster, set the KUBECONFIG environment variable as
 
 ```bash
 $ export KUBECONFIG=$HOME/.kube/configs/${USER}-${CLUSTER_NAME_PREFIX}.conf
 ```
 
-9. To teardown the cluster, execute
+10. To teardown the cluster, execute
 ```bash
 $ make destroy
 ```
 
-9. By default, VMs are created with 4vCPUs and 8GB of RAM. To change this use the configuration parameter `INSTANCE_TYPE`.
+11. By default, VMs are created with 4vCPUs and 8GB of RAM. To change this use the configuration parameter `INSTANCE_TYPE`.
 
 ```yaml
 ## default instance type
@@ -142,18 +147,23 @@ K8S_PROVIDER: virtualbox
 $ make provision.cluster
 ```
 
-3. Use virtualbox based cluster
+3. Validate the configuration
+```bash
+$ make validate
+```
+
+4. Use virtualbox based cluster
 ```bash
 $ make use.virtualbox
 ```
 
-4. To access the cluster, set the KUBECONFIG environment variable as
+5. To access the cluster, set the KUBECONFIG environment variable as
 
 ```bash
 $ export KUBECONFIG=$HOME/.kube/configs/${USER}-${CLUSTER_NAME_PREFIX}.conf
 ```
 
-5. To teardown the cluster, execute
+6. To teardown the cluster, execute
 ```bash
 $ make destroy
 ```
