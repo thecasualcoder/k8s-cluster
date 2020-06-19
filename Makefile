@@ -5,6 +5,10 @@ help: ## Prints help (only for targets with comments)
 up:
 	vagrant up --no-provision
 
+.PHONY: validate
+validate: ## Validate the configuration
+	./validate
+
 use.virtualbox: ## Use virtualbox as provider
 	ln -fs cluster.vb.yaml cluster.yaml
 

@@ -1,0 +1,52 @@
+#! /usr/bin/env bash
+
+VALID=true
+
+if [[ -z "${DIGITAL_OCEAN_TOKEN}" ]]; then
+  VALID=false
+  echo -e "digital ocean token          [\e[31mnot set\e[0m]"
+else 
+  echo -e "digital ocean token          [\e[32mok\e[0m]"
+fi
+
+if [[ -z "${DIGITAL_OCEAN_SSH_KEY_NAME}" ]]; then
+  VALID=false
+  echo -e "digital ocean ssh key name   [\e[31mnot set\e[0m]"
+else 
+  echo -e "digital ocean ssh key name   [\e[32mok\e[0m]"
+fi
+
+if [[ -z "${DIGITAL_OCEAN_PRIVATE_KEY}" ]]; then
+  VALID=false
+  echo -e "digital ocean private key    [\e[31mnot set\e[0m]"
+else 
+  echo -e "digital ocean private key    [\e[32mok\e[0m]"
+fi
+
+if [[ -z "${CLUSTER_NAME_PREFIX}" ]]; then
+  VALID=false
+  echo -e "cluster name prefix          [\e[31mnot set\e[0m]"
+else 
+  echo -e "cluster name prefix          [\e[32mok\e[0m]"
+fi
+
+if [[ -z "${KUBECONFIG}" ]]; then
+  VALID=false
+  echo -e "kubeconfig configuration     [\e[31mnot set\e[0m]"
+else 
+  echo -e "kubeconfig configuration     [\e[32mok\e[0m]"
+fi
+
+if [[ -z "${VAGRANT_DOTFILE_PATH}" ]]; then
+  VALID=false
+  echo -e "vagrant dotfile path         [\e[31mnot set\e[0m]"
+else 
+  echo -e "vagrant dotfile path         [\e[32mok\e[0m]"
+fi
+
+if [ $VALID = false ]; then
+  echo -e "\n\e[31mnot configured properly, kindly following the instruction in README.md\e[0m"
+  exit 1
+else
+  echo -e "\n\e[32mconfiguration looks good\e[0m"
+fi
