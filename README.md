@@ -140,30 +140,34 @@ INSTANCE_TYPE: s-4vcpu-8gb
 ```yaml
 K8S_PROVIDER: virtualbox
 ```
+2. Use virtualbox based cluster
+```bash
+$ make use.virtualbox
+```
 
-2. To setup k8s cluster locally using virtualbox, execute
+3. To setup k8s cluster locally using virtualbox, execute
 
 ```bash
 $ make provision.cluster
 ```
 
-3. Validate the configuration
+4. Validate the configuration
 ```bash
 $ make validate
 ```
 
-4. Use virtualbox based cluster
+5. Use virtualbox based cluster
 ```bash
 $ make use.virtualbox
 ```
 
-5. To access the cluster, set the KUBECONFIG environment variable as
+6. To access the cluster, set the KUBECONFIG environment variable as
 
 ```bash
 $ export KUBECONFIG=$HOME/.kube/configs/${USER}-${CLUSTER_NAME_PREFIX}.conf
 ```
 
-6. To teardown the cluster, execute
+7. To teardown the cluster, execute
 ```bash
 $ make destroy
 ```
