@@ -107,24 +107,30 @@ Additionally, if you are using ZSH shell instead of bash
 $ eval "$(direnv hook zsh)"
 ```
 
-8. To create the cluster,
+8. Verify the configuration before proceeding futher
+
+```bash
+$ make validate
+```
+
+9. To create the cluster,
 
 ```bash
 $ make provision.cluster
 ```
 
-9. To access the cluster, set the KUBECONFIG environment variable as
+10. To access the cluster, set the KUBECONFIG environment variable as
 
 ```bash
 $ export KUBECONFIG=$HOME/.kube/configs/${USER}-${CLUSTER_NAME_PREFIX}.conf
 ```
 
-10. To teardown the cluster, execute
+11. To teardown the cluster, execute
 ```bash
 $ make destroy
 ```
 
-11. By default, VMs are created with 4vCPUs and 8GB of RAM. To change this use the configuration parameter `INSTANCE_TYPE`.
+12. By default, VMs are created with 4vCPUs and 8GB of RAM. To change this use the configuration parameter `INSTANCE_TYPE`.
 
 ```yaml
 ## default instance type
