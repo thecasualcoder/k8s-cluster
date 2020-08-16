@@ -6,3 +6,4 @@
 .env
 .envrc-E
 cluster.yaml
+.openrc
