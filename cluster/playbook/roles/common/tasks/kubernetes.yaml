@@ -9,12 +9,18 @@
     repo: "deb https://apt.kubernetes.io/ kubernetes-{{kubernetes_package_codename}} main"
     state: present
 
-- name: Install Kubeadm, kubelet and kubectl
+- name: Get latest kubernetes version
+  when: kubernetes_version is not defined
+  shell:
+    cmd: apt-cache madison kubeadm | head -n 1 | awk '{print $3}'
+  register: latest_kubernetes_version
+
+- name: Install Kubeadm, kubelet and kubectl of version {{kubernetes_version | default(latest_kubernetes_version.stdout)}}
   apt:
     pkg:
-      - kubelet
-      - kubeadm
-      - kubectl
+      - kubelet={{kubernetes_version | default(latest_kubernetes_version.stdout)}}
+      - kubeadm={{kubernetes_version | default(latest_kubernetes_version.stdout)}}
+      - kubectl={{kubernetes_version | default(latest_kubernetes_version.stdout)}}
 
 - name: Prevent the kubelet, kubeadm and kubectl from being automatically installed, upgraded or removed.
   dpkg_selections:
