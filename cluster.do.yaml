@@ -15,6 +15,7 @@ addons:
 cluster:
   provider : digital_ocean
   master:
+    count: 2
     image: ubuntu-18-04-x64
     region: blr1
     size: s-2vcpu-4gb
