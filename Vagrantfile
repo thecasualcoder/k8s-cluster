@@ -62,11 +62,16 @@ end
 def machines_info(preference, provider)
   prefix = ENV.fetch('CLUSTER_NAME_PREFIX', 'k8s')
   machine_defaults = provider_defaults(provider)
-  master = merge(machine_defaults, preference.fetch(:cluster, {}).fetch(:master, machine_defaults))
+  master = merge(machine_defaults.merge({ count: 1 }), preference.fetch(:cluster, {}).fetch(:master, machine_defaults))
   nodes = preference.fetch(:cluster, {}).fetch(:node_pools, [provider_defaults(provider).merge({ count: 1 })])
 
-  machines = [master.merge({ role: 'master', name: "#{prefix}-master", virtualbox_private_ip: '10.10.10.2' })]
-  machine_index = 1
+  machines = []
+  machine_index = 0
+  (0...master[:count]).each do |index|
+      machines << master.merge({ role: 'master', name: "#{prefix}-master-#{index + 1}", virtualbox_private_ip: "10.10.10.#{2 + machine_index}" })
+      machine_index += 1
+  end
+
   nodes.each do |node|
     (0...node[:count]).each do |index|
       machine_name = "#{prefix}-node-#{node[:name]}-#{index + 1}"
@@ -74,6 +79,7 @@ def machines_info(preference, provider)
       machine_index += 1
     end
   end
+  pp machines
   machines
 end
 
