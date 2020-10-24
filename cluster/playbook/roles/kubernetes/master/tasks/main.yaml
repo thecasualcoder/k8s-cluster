@@ -12,6 +12,10 @@
   tags:
   - testing
 
+- name: Make sure loadbalancer_address is reachable
+  shell: "nc -vz {{ loadbalancer_address.split(':')[0] }} {{ loadbalancer_address.split(':')[1] }}"
+  when: loadbalancer_address is defined
+
 - name: Install pip for installing kubernetes module for ansible
   apt:
     pkg:
