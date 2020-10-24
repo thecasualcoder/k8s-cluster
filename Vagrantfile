@@ -79,7 +79,6 @@ def machines_info(preference, provider)
       machine_index += 1
     end
   end
-  pp machines
   machines
 end
 

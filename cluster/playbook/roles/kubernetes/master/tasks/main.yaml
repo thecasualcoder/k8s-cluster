@@ -1,4 +1,17 @@
 ---
+- name: Make sure loadbalancer_address is provided for multi-master
+  fail:
+    msg: >-
+      Master count {{ master_count }} is greater than 1 and loadbalancer_address is not provided.
+      Please create the loadbalancer and provide the address of it with variable loadbalancer_address.
+      Refer loadbalancer config here:
+      https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/#create-load-balancer-for-kube-apiserver
+  vars:
+     master_count: "{{ groups['master'] | length }}"
+  when: master_count|int > 1 and loadbalancer_address is not defined
+  tags:
+  - testing
+
 - name: Install pip for installing kubernetes module for ansible
   apt:
     pkg:
@@ -22,8 +35,16 @@
 
 - name: Init cluster if needed
   include_tasks: init.yaml
-  when: not kubeadm_ca.stat.exists
-  run_once: yes
+  vars:
+    master_index: "{{ groups['master'].index(inventory_hostname) }}"
+  when: not kubeadm_ca.stat.exists and master_index|int == 0
+
+- name: Join other masters to main master if needed
+  vars:
+    master_count: "{{ groups['master'] | length }}"
+    master_index: "{{ groups['master'].index(inventory_hostname) }}"
+  when: not kubeadm_ca.stat.exists and master_count|int > 1 and master_index|int != 0
+  include_tasks: join.yaml
 
 - name: Enable and check kubelet service
   systemd:

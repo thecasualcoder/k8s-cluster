@@ -27,18 +27,8 @@
     - {role: kubernetes/addons/ccm, when: provider == "digitalocean" and addons.ccm.enabled }
     - {role: kubernetes/addons/external_dns, when: provider == "digitalocean" and addons.external_dns.enabled }
     - {role: kubernetes/addons/cert_manager, when: provider == "digitalocean" and addons.cert_manager.enabled }
-  pre_tasks:
-    - name: Make sure 
-      fail:
-        msg: >-
-          Release version is not formatted correctly. Please make sure
-          it is of the form w.x.y-zz
-      when: not loadbalancer_address and "{{ groups['master'] | length }}" > 1
-      run_once: true  
-# if count > 1, loadbalancer_address is not provided, we will abort
-
-# if count = 1, loadbalancer_address is not provided, dont use lb flag
-# if count = 1, loadbalancer_address is provided, use lb flag
+  tags:
+    - testing
 
 - name: Configure kubernetes nodes
   hosts: node

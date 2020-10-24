@@ -3,14 +3,21 @@
   shell: "kubeadm reset --force"
   register: reset_cluster
 
+- set_fact:
+    advertise_address: "--control-plane-endpoint {{ loadbalancer_address }}"
+  when: loadbalancer_address is defined
+
+- set_fact:
+    advertise_address: "--apiserver-advertise-address {{ master_ip }} --apiserver-cert-extra-sans {{ default_network_ip }}"
+  when: loadbalancer_address is not defined
+
 - name: Init Kubernetes cluster
   when: reset_cluster is succeeded
   shell: |
     kubeadm init --service-cidr {{ service_cidr }} \
                  --pod-network-cidr {{ pod_network_cidr }} \
                  --token-ttl 1m \
-                 --apiserver-advertise-address {{ master_ip }} \
-                 --apiserver-cert-extra-sans {{ default_network_ip }} \
+                 {{ advertise_address }} \
                  {{ kubeadm_opts }} \
                  {{ init_opts }}
   register: init_cluster
