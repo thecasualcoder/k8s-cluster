@@ -13,11 +13,13 @@
   shell: kubeadm alpha certs certificate-key
   register: certificate_key
   delegate_to: "{{ master_node }}"
+  run_once: true
 
-- name: Get upload certs key
+- name: Upload certs with the certificate key
   shell:
     cmd: "kubeadm init phase upload-certs --upload-certs --certificate-key {{ certificate_key.stdout }}"
   delegate_to: "{{ master_node }}"
+  run_once: true
 
 - name: Join to main master node
   shell:
