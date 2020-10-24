@@ -27,8 +27,6 @@
     - {role: kubernetes/addons/ccm, when: provider == "digitalocean" and addons.ccm.enabled }
     - {role: kubernetes/addons/external_dns, when: provider == "digitalocean" and addons.external_dns.enabled }
     - {role: kubernetes/addons/cert_manager, when: provider == "digitalocean" and addons.cert_manager.enabled }
-  tags:
-    - testing
 
 - name: Configure kubernetes nodes
   hosts: node

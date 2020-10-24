@@ -9,8 +9,6 @@
   vars:
      master_count: "{{ groups['master'] | length }}"
   when: master_count|int > 1 and loadbalancer_address is not defined
-  tags:
-  - testing
 
 - name: Make sure loadbalancer_address is reachable
   shell: "nc -vz {{ loadbalancer_address.split(':')[0] }} {{ loadbalancer_address.split(':')[1] }}"
