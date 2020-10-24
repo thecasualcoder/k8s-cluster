@@ -13,20 +13,22 @@
   roles:
     - {role: kubernetes/common}
 
-- name: Configure kubernetes master
+- name: Configure kubernetes master(s)
   hosts: master
   remote_user: ubuntu
   become: yes
   environment:
     K8S_AUTH_KUBECONFIG: "{{kubeadmin_config}}"
+  vars:
+    master_index: "{{ groups['master'].index(inventory_hostname) }}"
   roles:
     - {role: kubernetes/master}
-    - {role: kubernetes/addons/cni}
-    - {role: kubernetes/addons/ingress, when: addons.ingress.enabled }
-    - {role: kubernetes/addons/csi, when: provider == "digitalocean" and addons.csi.enabled }
-    - {role: kubernetes/addons/ccm, when: provider == "digitalocean" and addons.ccm.enabled }
-    - {role: kubernetes/addons/external_dns, when: provider == "digitalocean" and addons.external_dns.enabled }
-    - {role: kubernetes/addons/cert_manager, when: provider == "digitalocean" and addons.cert_manager.enabled }
+    - {role: kubernetes/addons/cni, when: master_index|int == 0}
+    - {role: kubernetes/addons/ingress, when: master_index|int == 0 and addons.ingress.enabled }
+    - {role: kubernetes/addons/csi, when: master_index|int == 0 and provider == "digitalocean" and addons.csi.enabled }
+    - {role: kubernetes/addons/ccm, when: master_index|int == 0 and provider == "digitalocean" and addons.ccm.enabled }
+    - {role: kubernetes/addons/external_dns, when: master_index|int == 0 and provider == "digitalocean" and addons.external_dns.enabled }
+    - {role: kubernetes/addons/cert_manager, when: master_index|int == 0 and provider == "digitalocean" and addons.cert_manager.enabled }
 
 - name: Configure kubernetes nodes
   hosts: node
