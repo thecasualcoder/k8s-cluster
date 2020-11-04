@@ -8,6 +8,7 @@
     cmd: kubeadm token create --ttl 1m --print-join-command
   register: join_command
   delegate_to: "{{ master_node }}"
+  run_once: true
 
 - name: Create certificate key
   shell: kubeadm alpha certs certificate-key
