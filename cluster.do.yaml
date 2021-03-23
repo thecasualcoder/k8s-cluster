@@ -28,5 +28,5 @@ cluster:
     - count: 1
       image: ubuntu-18-04-x64
       region: blr1
-      size: s-1vcpu-3gb
+      size: s-1vcpu-2gb
       name: small
