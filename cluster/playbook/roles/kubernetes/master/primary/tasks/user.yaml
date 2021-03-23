@@ -8,10 +8,16 @@
     advertise_address: "{{ default_network_ip }}"
   when: not (use_private_ip_for_external_access | default(false))
 
+- name: "Create kubeadm-config"
+  shell:
+    cmd: |
+      kubectl get cm -n kube-system kubeadm-config -o jsonpath="{.data.ClusterConfiguration}" > {{kubeconfig_path}}kubeadm-config.yaml
+    creates: "{{kubeconfig_path}}kubeadm-config.yaml"
+
 - name: "Create additional user {{host_user}}"
   shell:
     cmd: |
-      kubeadm alpha kubeconfig user --client-name {{ host_user }} --apiserver-advertise-address {{ advertise_address }} > {{kubeconfig_path}}{{host_user}}.conf
+      kubeadm alpha kubeconfig user --client-name {{ host_user }} --config {{kubeconfig_path}}kubeadm-config.yaml > {{kubeconfig_path}}{{host_user}}.conf
     creates: "{{kubeconfig_path}}{{host_user}}.conf"
 
 - name: Get an existing Service object
