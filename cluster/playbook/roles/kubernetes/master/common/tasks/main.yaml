@@ -24,7 +24,7 @@
 
 - name: Install openshift pip package for ansible to query kubernetes objects
   shell:
-    cmd: "/usr/bin/{{ item.cmd }} install openshift"
+    cmd: "/usr/bin/{{ item.cmd }} install openshift==0.11.2"
     creates: "/usr/local/lib/{{ item.version }}/dist-packages/kubernetes"
   with_items:
     - { cmd: 'pip', version: 'python2.7' }
