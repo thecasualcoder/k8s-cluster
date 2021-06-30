@@ -17,7 +17,6 @@
 - name: Install pip for installing kubernetes module for ansible
   apt:
     pkg:
-      - python-pip
       - python3-pip
       - python-apt
     update_cache: yes
@@ -27,5 +26,4 @@
     cmd: "/usr/bin/{{ item.cmd }} install openshift==0.11.2"
     creates: "/usr/local/lib/{{ item.version }}/dist-packages/kubernetes"
   with_items:
-    - { cmd: 'pip', version: 'python2.7' }
     - { cmd: 'pip3', version: 'python3.6' }

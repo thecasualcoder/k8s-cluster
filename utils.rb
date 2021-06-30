@@ -28,6 +28,7 @@ def configure_provision(index, machines, preference, node, extra_vars = {})
   cert_manager = addons.fetch(:cert_manager, {})
 
   default_extra_vars = {
+    "ansible_python_interpreter": "/usr/bin/python3",
     "network_interface": 'enp0s8',
     "provider": 'virtualbox',
     "addons": {
