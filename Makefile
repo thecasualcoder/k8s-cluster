@@ -28,7 +28,7 @@ destroy.vm:
 	-vagrant destroy --force
 
 destroy: destroy.vm ## Destroy all the Vms
-	rm -r ${VAGRANT_DOTFILE_PATH}
+	rm -rf ${VAGRANT_DOTFILE_PATH}
 	rm -f ${HOME}/.kube/configs/${USER}-${CLUSTER_NAME_PREFIX}.conf
 
 status: ## Prints the VMs status
