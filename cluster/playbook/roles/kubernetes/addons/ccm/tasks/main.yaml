@@ -1,5 +1,6 @@
 ---
-- include_role:
+- name: Include secret
+  include_role:
     name: kubernetes/addons/common/secret
 
 - name: Create ccm driver
@@ -7,15 +8,17 @@
 
   - name: Create a ccm driver directory if necessary
     file:
-      path: "{{ccm_driver_path}}"
+      path: "{{ ccm_driver_path }}"
       state: directory
+      mode: 0640
 
   - name: Generate ccm driver file
     template:
       src: "ccm-digitalocean.yaml.j2"
-      dest: "{{ccm_driver_path}}/ccm.yaml"
+      dest: "{{ ccm_driver_path }}/ccm.yaml"
+      mode: 0440
     register: ccm_driver_template
 
   - name: "Create ccm driver"
-    shell: "kubectl --kubeconfig {{kubeadmin_config}} apply -f {{ ccm_driver_path }}/ccm.yaml"
+    command: "kubectl --kubeconfig {{ kubeadmin_config }} apply -f {{ ccm_driver_path }}/ccm.yaml"
     when: ccm_driver_template.changed

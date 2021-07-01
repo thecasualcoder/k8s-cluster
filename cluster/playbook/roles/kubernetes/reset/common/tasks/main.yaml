@@ -1,4 +1,4 @@
 ---
 - name: Reset Kubernetes component
-  shell: "kubeadm reset --force"
-  ignore_errors: True
+  command: "kubeadm reset --force"
+  ignore_errors: true

@@ -1,6 +1,6 @@
 - name: restart-docker
   systemd:
-    daemon_reload: yes
+    daemon_reload: true
     name: docker
     state: restarted
-  become: yes
+  become: true

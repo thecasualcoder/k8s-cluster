@@ -1,29 +1,32 @@
 ---
 - name: Create a cert_manager directory if necessary
   file:
-    path: "{{cert_manager_path}}"
+    path: "{{ cert_manager_path }}"
+    mode: 0640
     state: directory
 
 - name: Create cert_manager
   block:
-  - name: Generate cert_manager file
-    template:
-      src: "cert_manager.yaml.j2"
-      dest: "{{ cert_manager_path }}/cert_manager.yaml"
-    register: cert_manager_template
+    - name: Generate cert_manager file
+      template:
+        src: "cert_manager.yaml.j2"
+        dest: "{{ cert_manager_path }}/cert_manager.yaml"
+        mode: 0440
+      register: cert_manager_template
 
-  - name: Create cert_manager
-    shell: "kubectl --kubeconfig {{kubeadmin_config}} apply -f {{ cert_manager_path }}/cert_manager.yaml"
-    when: cert_manager_template.changed
+    - name: Create cert_manager
+      command: "kubectl --kubeconfig {{ kubeadmin_config }} apply -f {{ cert_manager_path }}/cert_manager.yaml"
+      when: cert_manager_template.changed
 
 - name: Create issuer
   block:
-  - name: Generate cert_manager issuer file
-    template:
-      src: "issuer.yaml.j2"
-      dest: "{{ cert_manager_path }}/issuer.yaml"
-    register: cert_manager_issuer
+    - name: Generate cert_manager issuer file
+      template:
+        src: "issuer.yaml.j2"
+        dest: "{{ cert_manager_path }}/issuer.yaml"
+        mode: 0440
+      register: cert_manager_issuer
 
-  - name: Create cert_manager issuer
-    shell: "kubectl --kubeconfig {{kubeadmin_config}} apply -f {{ cert_manager_path }}/issuer.yaml"
-    when: cert_manager_issuer.changed
+    - name: Create cert_manager issuer
+      command: "kubectl --kubeconfig {{ kubeadmin_config }} apply -f {{ cert_manager_path }}/issuer.yaml"
+      when: cert_manager_issuer.changed

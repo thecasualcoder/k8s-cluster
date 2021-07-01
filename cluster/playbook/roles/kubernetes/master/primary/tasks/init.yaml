@@ -1,13 +1,15 @@
 ---
 - name: Reset Kubernetes component
-  shell: "kubeadm reset --force"
+  command: "kubeadm reset --force"
   register: reset_cluster
 
-- set_fact:
+- name: Use loadbalancer_address for advertise_address for HA setup
+  set_fact:
     advertise_address: "--control-plane-endpoint {{ loadbalancer_address }}"
   when: loadbalancer_address is defined
 
-- set_fact:
+- name: Use master_ip for advertise_address for non HA setup
+  set_fact:
     advertise_address: "--apiserver-advertise-address {{ master_ip }} --apiserver-cert-extra-sans {{ default_network_ip }}"
   when: loadbalancer_address is not defined
 
@@ -26,6 +28,7 @@
   file:
     path: ".kube/"
     state: directory
+    mode: 0640
 
 - name: Copy admin.conf to Home directory
   when: init_cluster is succeeded
@@ -34,7 +37,7 @@
     dest: ".kube/config"
     owner: "{{ ansible_user | default(ansible_user_id) }}"
     group: "{{ ansible_user | default(ansible_user_id) }}"
-    mode: 0755
+    mode: 0550
     remote_src: true
 
 - name: Deploy kubernetes dashboard into cluster

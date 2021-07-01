@@ -9,7 +9,7 @@ kubeconfig_path: /etc/kubernetes/
 enable_dashboard: false
 kubeadm_opts: ""
 # kubernetes_version: "1.17.0-00"
-#loadbalancer_address: 139.59.49.225:6443
+# loadbalancer_address: 139.59.49.225:6443
 network_dir: /etc/kubernetes/network
 
 # Network implementation('flannel', 'canal')

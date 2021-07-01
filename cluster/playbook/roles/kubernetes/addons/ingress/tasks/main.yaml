@@ -4,15 +4,17 @@
 
   - name: Create a ingress directory if necessary
     file:
-      path: "{{ingress_path}}"
+      path: "{{ ingress_path }}"
       state: directory
+      mode: 0640
 
   - name: Generate ingress file
     template:
       src: "ingress.yaml.j2"
       dest: "{{ ingress_path }}/ingress.yaml"
+      mode: 0440
     register: ingress_template
 
   - name: Create ingress
-    shell: "kubectl --kubeconfig {{kubeadmin_config}} apply -f {{ ingress_path }}/ingress.yaml"
+    command: "kubectl --kubeconfig {{ kubeadmin_config }} apply -f {{ ingress_path }}/ingress.yaml"
     when: ingress_template.changed

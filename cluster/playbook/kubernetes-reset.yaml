@@ -2,13 +2,13 @@
 - name: Reset Kubernetes cluster
   hosts: common
   remote_user: ubuntu
-  become: yes
+  become: true
   roles:
     - kubernetes/reset/common
 
 - name: Reset master specific components
   hosts: master
   remote_user: ubuntu
-  become: yes
+  become: true
   roles:
     - kubernetes/reset/master

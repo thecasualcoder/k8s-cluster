@@ -3,6 +3,7 @@
   template:
     src: templates/docker.daemon.json.j2
     dest: /etc/docker/daemon.json
+    mode: 0440
   notify:
     - restart-docker
 
@@ -10,9 +11,11 @@
   file:
     path: /etc/systemd/system/docker.service.d
     state: directory
+    mode: 0640
 
 - name: Configure kublet
   template:
     src: templates/kubelet-default.j2
     dest: /etc/default/kubelet
-  become: yes
+    mode: 0440
+  become: true

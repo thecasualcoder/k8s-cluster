@@ -11,12 +11,12 @@
 - name: Enable and check kubelet service
   systemd:
     name: kubelet
-    daemon_reload: yes
+    daemon_reload: true
     state: started
-    enabled: yes
+    enabled: true
   register: started_kubelet
 
 - name: Create additional user
   include_tasks: user.yaml
   when: additional_user.create
-  run_once: yes
+  run_once: true
