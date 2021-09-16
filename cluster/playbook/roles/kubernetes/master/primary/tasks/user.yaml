@@ -18,7 +18,7 @@
 - name: "Create additional user {{ host_user }}"
   shell:
     cmd: |
-      kubeadm alpha kubeconfig user --client-name {{ host_user }} --config {{ kubeconfig_path }}kubeadm-config.yaml > {{ kubeconfig_path }}{{ host_user }}.conf
+      kubeadm kubeconfig user --client-name {{ host_user }} --config {{ kubeconfig_path }}kubeadm-config.yaml > {{ kubeconfig_path }}{{ host_user }}.conf
     creates: "{{ kubeconfig_path }}{{ host_user }}.conf"
 
 - name: Get an existing Service object
