@@ -1,0 +1,20 @@
+---
+- name: "Create temporary file to generate csi {{ file }}"
+  tempfile:
+    state: file
+    suffix: yaml
+  register: csi_file
+
+- name: "Generate {{ file }} driver file"
+  template:
+    src: "{{ file }}"
+    dest: "{{ csi_file.path }}"
+    mode: 0440
+
+- name: "Delete existing {{ file }} driver"
+  command: "kubectl --kubeconfig {{ kubeadmin_config }} delete -f {{ csi_file.path }} "
+  ignore_errors: true
+  when: (csi_driver.resources|length != 0)
+
+- name: "Create {{ file }} driver"
+  command: "kubectl --kubeconfig {{ kubeadmin_config }} apply -f {{ csi_file.path }} "

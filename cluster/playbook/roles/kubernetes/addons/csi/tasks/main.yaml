@@ -9,25 +9,11 @@
     kind: CSIDriver
   register: csi_driver
 
-- name: Create csi driver
-  block:
-    - name: Create temporary file to generate csi driver
-      tempfile:
-        state: file
-        suffix: yaml
-      register: csi_driver_file
-
-    - name: Generate csi driver file
-      template:
-        src: "csi-digitalocean.yaml"
-        dest: "{{ csi_driver_file.path }}"
-        mode: 0440
-
-    - name: "Delete existing csi driver"
-      command: "kubectl --kubeconfig {{ kubeadmin_config }} delete -f {{ csi_driver_file.path }} "
-      ignore_errors: true
-      when: (csi_driver.resources|length != 0)
-
-    - name: "Create csi driver"
-      command: "kubectl --kubeconfig {{ kubeadmin_config }} apply -f {{ csi_driver_file.path }} "
+- include_tasks: install.yaml
+  vars:
+    file: "{{ item }}"
+  with_items:
+    - crds.yaml
+    - driver.yaml
+    - snapshot-controller.yaml
   when: (csi_driver.resources|length == 0) or (addons.csi.upgrade == true)

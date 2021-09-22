@@ -1,7 +1,7 @@
 ---
 addons:
   cloud_control_manager: true
-  cloud_storage_interface: false
+  cloud_storage_interface: true
   open_elastic_block_storage: false
   ingress: false
   external_dns:
