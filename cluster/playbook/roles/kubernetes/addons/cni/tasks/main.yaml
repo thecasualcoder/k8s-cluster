@@ -11,6 +11,7 @@
     src: "{{ item }}"
     dest: "{{ network_dir }}/{{ item | basename | regex_replace('\\.j2','') }}"
     mode: 0440
+  register: network_src
   with_fileglob:
     - ../templates/{{ network }}*.j2
 
@@ -23,7 +24,7 @@
   changed_when: false
 
 - name: "Create {{ network }} network daemonset"
-  when: check_net is failed
+  when: network_src.changed or check_net is failed
   command: kubectl apply --kubeconfig={{ kubeadmin_config }} -f {{ network_dir }}/
   delegate_to: "{{ groups['master'][0] }}"
   run_once: true

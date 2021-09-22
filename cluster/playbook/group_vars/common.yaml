@@ -13,4 +13,4 @@ kubeadm_opts: ""
 network_dir: /etc/kubernetes/network
 
 # Network implementation('flannel', 'canal')
-network: canal
+network: flannel
