@@ -7,3 +7,6 @@
 .envrc-E
 cluster.yaml
 .openrc
+.DS_Store
+./**/.DS_Store
+.idea
